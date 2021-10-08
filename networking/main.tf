@@ -106,9 +106,9 @@ resource "aws_route_table_association" "tf_priv_assoc" {
   
 }
 
-resource "aws_security_group" "tf_pub_sg" {
-    name = "tf_pub_sg"
-    description = "tf_pub_sg"
+resource "aws_security_group" "tf_priv_sg" {
+    name = "tf_priv_sg"
+    description = "tf_priv_sg"
     vpc_id = aws_vpc.tf_vpc.id
 
     ingress = [ {
@@ -122,6 +122,6 @@ resource "aws_security_group" "tf_pub_sg" {
       from_port = 0
       to_port = 0
       protocol         = "-1"
-      cidr_blocks      = ["${var.accessip}"]
+      cidr_blocks      = ["${var.vpc_cidr}"]
     } ]
 }
