@@ -1,8 +1,7 @@
 # Pub NACL rules
 resource "aws_network_acl" "tf_pub_acl" {
   vpc_id = aws_vpc.tf_vpc.id
-  count = length(aws_subnet.tf_pub_subnet)
-  subnet_ids = aws_subnet.tf_pub_subnet.*.id[count.index]
+  subnet_ids = [for s in aws_subnet.tf_pub_subnet : s.id] 
   ingress {
       protocol   = "tcp"
       rule_no    = 100
@@ -78,8 +77,7 @@ resource "aws_network_acl" "tf_pub_acl" {
 # Priv NACL rules
 resource "aws_network_acl" "tf_priv_acl" {
   vpc_id = aws_vpc.tf_vpc.id
-  count = length(aws_subnet.tf_priv_subnet)
-  subnet_ids = aws_subnet.tf_priv_subnet.*.id[count.index]
+  subnet_ids = [for s in aws_subnet.tf_priv_subnet: s.id]
 
     ingress {
       protocol   = "tcp"
