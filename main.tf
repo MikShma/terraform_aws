@@ -11,7 +11,7 @@ module "storage" {
 
 #deploy network
 
-module "network" {
+module "networking" {
     source = "./networking"
     vpc_cidr = var.vpc_cidr
     public_cidr = var.public_cidr

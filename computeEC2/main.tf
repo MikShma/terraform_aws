@@ -21,7 +21,7 @@ resource "aws_instance" "tf_word_press" {
   instance_type = var.instance_type
   ami           = data.aws_ami.server_ami.id
 
-  tags {
+  tags = {
     Name = "tf_server-${count.index +1}"
   }
   key_name               = aws_key_pair.tf_auth.id
