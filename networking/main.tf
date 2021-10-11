@@ -100,9 +100,9 @@ resource "aws_subnet" "tf_priv_subnet" {
 }
 
 resource "aws_route_table_association" "tf_priv_assoc" {
-    count = aws_subnet.tf_priv_subnet.count
+    count = length(aws_subnet.tf_priv_subnet)
     subnet_id = aws_subnet.tf_priv_subnet.*.id[count.index]
-    route_table_id = aws_route_table.tf_priv_routetb.id
+    route_table_id = aws_default_route_table.tf_priv_routetb.id
   
 }
 
