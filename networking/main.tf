@@ -22,10 +22,10 @@ resource "aws_internet_gateway" "tf_igw" {
 
 resource "aws_route_table" "tf_public_route" {
     vpc_id = aws_vpc.tf_vpc.id
-    route = [ {
+    route  {
       cidr_block = "0.0.0.0/0"
       gateway_id = aws_internet_gateway.tf_igw.id
-    } ]
+    } 
   tags = {
     Name = "pub_routetbl"
   }
@@ -53,7 +53,7 @@ resource "aws_subnet" "tf_pub_subnet" {
 }
 
 resource "aws_route_table_association" "tf_pub_assoc" {
-    count = aws_subnet.tf_pub_subnet.count
+    count = length(aws_subnet.tf_pub_subnet)
     subnet_id = aws_subnet.tf_pub_subnet.*.id[count.index]
     route_table_id = aws_route_table.tf_public_route.id
   
@@ -64,26 +64,33 @@ resource "aws_security_group" "tf_pub_sg" {
     description = "tf_pub_sg"
     vpc_id = aws_vpc.tf_vpc.id
 
-    ingress = [ {
+    ingress {
       from_port = 22
       to_port = 22
       protocol         = "tcp"
       cidr_blocks      = ["${var.accessip}"]
-    } ,
+    } 
   
-    {
+    ingress {
       from_port = 80
       to_port = 80
       protocol         = "tcp"
       cidr_blocks      = ["${var.accessip}"]
-    } ]
+    }
+    
+    ingress {
+      from_port = 443
+      to_port = 443
+      protocol         = "tcp"
+      cidr_blocks      = ["${var.accessip}"]
+    }
 
-    egress = [ {
+    egress {
       from_port = 0
       to_port = 0
       protocol         = "-1"
       cidr_blocks      = ["${var.accessip}"]
-    } ]
+    }
 }
 
 resource "aws_subnet" "tf_priv_subnet" {
@@ -111,17 +118,17 @@ resource "aws_security_group" "tf_priv_sg" {
     description = "tf_priv_sg"
     vpc_id = aws_vpc.tf_vpc.id
 
-    ingress = [ {
+    ingress {
       from_port = 22
       to_port = 22
       protocol         = "tcp"
       cidr_blocks      = ["${var.vpc_cidr}"]
-    } ]
+    }
 
-    egress = [ {
+    egress {
       from_port = 0
       to_port = 0
       protocol         = "-1"
       cidr_blocks      = ["${var.vpc_cidr}"]
-    } ]
+    }
 }
