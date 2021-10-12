@@ -16,9 +16,17 @@ variable "security_group" {
 }
 
 variable "subnets" {
-  
+   type = list(string)   
 }
 
 variable "subnet_ips" {
    type = list(string)  
+}
+
+variable "priv_subnet_ids" {
+   type = list(string)  
+}
+
+variable "priv_security_group" {
+  
 }

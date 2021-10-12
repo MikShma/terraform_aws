@@ -5,7 +5,7 @@ provider "aws" {
 #create ssh key
 resource "null_resource" "cluster" {
     provisioner "local-exec" {
-    command = fileexists("${var.priv_key_path}") ? "" : "ssh-keygen -t rsa -N \"\" -f ${var.priv_key_path}"
+    command = fileexists("${var.priv_key_path}") ? "echo \"ssh key exist\"" : "ssh-keygen -t rsa -N \"\" -f ${var.priv_key_path}"
   }
 }
 
@@ -35,4 +35,6 @@ module "compute" {
     security_group = module.networking.pub_security_group
     subnets = module.networking.pub_subnets_id
     subnet_ips = module.networking.pub_subnet_ips
+    priv_subnet_ids = module.networking.priv_subnets_id
+    priv_security_group =  module.networking.priv_security_group
 }

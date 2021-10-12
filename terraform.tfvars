@@ -17,5 +17,5 @@ accessip = "0.0.0.0/0"
 
 key_name = "tf_key"
 priv_key_path = "/home/ec2-user/.ssh/id_rsa"
-instance_count = 2
+instance_count = 1
 instance_type = "t2.micro" 
