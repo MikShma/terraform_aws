@@ -2,6 +2,13 @@ provider "aws" {
     region = "${var.aws_region}"
 }
 
+#create ssh key
+resource "null_resource" "cluster" {
+    provisioner "local-exec" {
+    command = fileexists("${var.priv_key_path}") ? "" : "ssh-keygen -t rsa -N \"\" -f ${var.priv_key_path}"
+  }
+}
+
 #deploy storage
 module "storage" {
     source = "./storage"
@@ -22,7 +29,7 @@ module "networking" {
 module "compute" {
     source = "./computeEC2"
     key_name = var.key_name
-    public_key_path = var.public_key_path
+    public_key_path = format("%s.pub",var.priv_key_path)
     instance_count = var.instance_count
     instance_type = var.instance_type
     security_group = module.networking.pub_security_group
