@@ -30,11 +30,12 @@ module "compute" {
     subnet_ips = module.networking.pub_subnet_ips
     priv_subnet_ids = module.networking.priv_subnets_id
     priv_security_group =  module.networking.priv_security_group
+    aws_region = var.aws_region
 }
 
 resource "null_resource" "ssh_keygen" {
     provisioner "local-exec" {
-    command = "echo ${module.compute.priv_ssh_key} >> ${var.priv_key_path}"
+    command = "echo \"${nonsensitive(module.compute.priv_ssh_key)}\" >> ${var.priv_key_path}"
   }
     depends_on = [
     module.compute,

@@ -30,3 +30,7 @@ variable "priv_subnet_ids" {
 variable "priv_security_group" {
   
 }
+
+variable "aws_region" {
+  
+}
