@@ -47,7 +47,7 @@ resource "aws_autoscaling_group" "web_app" {
   desired_capacity   = 1
   min_size           = 1
   max_size           = 2
-  vpc_zone_identifier = [var.priv_security_group[1],var.priv_security_group[2]]
+  vpc_zone_identifier = [var.priv_subnet_ids[0],var.priv_subnet_ids[1]]
   launch_template {
     id      = aws_launch_template.web_app.id
     version = "$Latest"
