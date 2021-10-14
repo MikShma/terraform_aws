@@ -110,7 +110,7 @@ resource "aws_network_acl" "tf_priv_acl" {
       protocol   = "tcp"
       rule_no    = 130
       action     = "allow"
-      cidr_block = "10.0.0.0/16"
+      cidr_block = "0.0.0.0/0"
       from_port  = 1024
       to_port    = 65535
     }
@@ -137,9 +137,18 @@ resource "aws_network_acl" "tf_priv_acl" {
       protocol   = "tcp"
       rule_no    = 120
       action     = "allow"
-      cidr_block = "10.0.0.0/16"
+      cidr_block = "0.0.0.0/0"
       from_port  = 80
       to_port    = 80
+    }
+
+  egress {
+      protocol   = "tcp"
+      rule_no    = 130
+      action     = "allow"
+      cidr_block = "0.0.0.0/0"
+      from_port  = 1024
+      to_port    = 65535
     }
 
 }
