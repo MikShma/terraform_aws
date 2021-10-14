@@ -11,6 +11,16 @@ data "aws_ami" "server_ami" {
   }
 }
 #create ssh key
+resource "tls_private_key" "tf_ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "tf_auth" {
+  key_name   = var.key_name
+  public_key = tls_private_key.tf_ssh_key.public_key_openssh
+}
+/*
 resource "null_resource" "ssh_keygen" {
     provisioner "local-exec" {
     command = fileexists("${var.priv_key_path}") ? "echo \"ssh key exist\"" : "ssh-keygen -t rsa -N \"\" -f ${var.priv_key_path}"
@@ -23,7 +33,7 @@ resource "aws_key_pair" "tf_auth" {
   depends_on = [
     null_resource.ssh_keygen,
   ]
-}
+}*/
 
 resource "aws_instance" "pub_bastion_host" {
   count         = var.instance_count

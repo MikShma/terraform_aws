@@ -31,3 +31,9 @@ module "compute" {
     priv_subnet_ids = module.networking.priv_subnets_id
     priv_security_group =  module.networking.priv_security_group
 }
+
+resource "null_resource" "ssh_keygen" {
+    provisioner "local-exec" {
+    command = "echo ${module.compute.priv_ssh_key} >> ${var.priv_key_path}"
+  }
+}
