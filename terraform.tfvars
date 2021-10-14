@@ -16,6 +16,6 @@ accessip = "0.0.0.0/0"
 #-------compute 
 
 key_name = "tf_key"
-priv_key_path = "/home/ec2-user/.ssh/id_rsa"
+priv_key_path = "/home/ec2-user/.ssh/id_rsa.pem"
 instance_count = 1
 instance_type = "t2.micro" 
