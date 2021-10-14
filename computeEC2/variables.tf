@@ -34,3 +34,7 @@ variable "priv_security_group" {
 variable "aws_region" {
   
 }
+
+variable "vpc_id" {
+  
+}
