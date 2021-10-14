@@ -37,6 +37,6 @@ resource "null_resource" "ssh_keygen" {
     command = "echo ${module.compute.priv_ssh_key} >> ${var.priv_key_path}"
   }
     depends_on = [
-    module.compute.tls_private_key.tf_ssh_key,
+    module.compute,
   ]
 }
