@@ -47,7 +47,7 @@ resource "aws_autoscaling_group" "web_app" {
   desired_capacity   = 1
   min_size           = 1
   max_size           = 2
-  vpc_zone_identifier = [var.subnets[0],var.subnets[1]]
+  vpc_zone_identifier = [var.priv_security_group[1],var.priv_security_group[2]]
   launch_template {
     id      = aws_launch_template.web_app.id
     version = "$Latest"
@@ -83,7 +83,7 @@ resource "aws_lb_listener" "http" {
 }
 
 resource "aws_lb_target_group" "tf_target_gr" {
-  name = "tf_target_gr"
+  name = "tf-target-gr"
   port = 80
   protocol = "HTTP"
   vpc_id = var.vpc_id

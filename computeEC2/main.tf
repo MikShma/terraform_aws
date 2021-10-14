@@ -49,6 +49,7 @@ resource "aws_instance" "pub_bastion_host" {
   user_data = templatefile("${path.module}/userdata.tpl", {firewall_subnets = var.subnet_ips[count.index]})  
 }
 
+/*
 resource "aws_instance" "priv_app_host" {
   count         = 1
   instance_type = var.instance_type
@@ -61,4 +62,4 @@ resource "aws_instance" "priv_app_host" {
   vpc_security_group_ids = [var.priv_security_group]
   subnet_id              = var.priv_subnet_ids[count.index]
   user_data = templatefile("${path.module}/userdata.tpl", {firewall_subnets = "priv_subnet"})  
-}
+} */
