@@ -17,3 +17,7 @@ output "priv_subnets_id" {
 output "pub_subnet_ips" {
    value = aws_subnet.tf_pub_subnet.*.cidr_block
 }
+
+output "vpc_id" {
+   value = aws_vpc.tf_vpc.id
+}

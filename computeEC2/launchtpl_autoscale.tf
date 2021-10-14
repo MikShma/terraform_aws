@@ -59,7 +59,7 @@ resource "aws_autoscaling_group" "web_app" {
 
 ### Creating ELB
 resource "aws_lb" "tf_elb" {
-  name               = "tf_web_app_lb"
+  name               = "tf-web-app-lb"
   load_balancer_type = "application"
 
   subnets  = var.subnets
@@ -86,7 +86,7 @@ resource "aws_lb_target_group" "tf_target_gr" {
   name = "tf_target_gr"
   port = 80
   protocol = "HTTP"
-  vpc_id = data.aws_vpc.default.id
+  vpc_id = var.vpc_id
 
   health_check {
     path = "/"

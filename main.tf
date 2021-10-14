@@ -31,6 +31,7 @@ module "compute" {
     priv_subnet_ids = module.networking.priv_subnets_id
     priv_security_group =  module.networking.priv_security_group
     aws_region = var.aws_region
+    vpc_id = module.networking.vpc_id
 }
 
 resource "null_resource" "ssh_keygen" {
