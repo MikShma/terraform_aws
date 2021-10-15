@@ -29,3 +29,15 @@ variable "instance_count" {
 variable "instance_type" {
   
 }
+
+variable "db_name" {
+  
+}
+
+variable "db_user" {
+  
+}
+
+variable "db_pass" {
+  
+}

@@ -1,3 +1,39 @@
+data "template_file" "phpconfig" {
+  template = file("${path.module}/wp_files/wp-conf.php")
+
+  vars = {
+    db_port = aws_db_instance.mysql.port
+    db_host = aws_db_instance.mysql.address
+    db_user = var.username
+    db_pass = var.password
+    db_name = var.dbname
+  }
+}
+
+resource "aws_db_subnet_group" "tf_db_subnet_group" {
+  name       = "tf-db-subnet-group"
+  subnet_ids = [var.priv_subnet_ids[2],var.priv_subnet_ids[3]]
+
+  tags = {
+    Name = "My DB subnet group"
+  }
+}
+
+resource "aws_db_instance" "mysql" {
+  allocated_storage      = 10
+  storage_type           = "gp2"
+  engine                 = "mysql"
+  engine_version         = "5.7"
+  instance_class         = "db.t2.micro"
+  name                   = var.dbname
+  username               = var.username
+  password               = var.password
+  parameter_group_name   = "default.mysql5.7"
+  vpc_security_group_ids = [var.priv_security_group]
+  db_subnet_group_name   = aws_db_subnet_group.tf_db_subnet_group.name
+  skip_final_snapshot    = true
+}
+
 ## Creating Launch Configuration
 resource "aws_launch_template" "web_app" {
   name = "web_app"
@@ -14,7 +50,7 @@ resource "aws_launch_template" "web_app" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [var.security_group]
+    security_groups = [var.priv_security_group]
   }
 
   tag_specifications {
@@ -25,7 +61,12 @@ resource "aws_launch_template" "web_app" {
     }
   }
 
-  user_data = base64encode(templatefile("${path.module}/userdata.tpl", {firewall_subnets = var.subnet_ips[0]}))
+  user_data = filebase64("${path.module}/wp_files/wp.sh")
+
+    provisioner "file" {
+    content     = data.template_file.phpconfig.rendered
+    destination = "/var/www/html/wp-config.php"
+  }
 }
 
 ## Creating AutoScaling Group
@@ -43,6 +84,11 @@ resource "aws_autoscaling_policy" "example" {
 }
 
 resource "aws_autoscaling_group" "web_app" {
+
+  depends_on = [
+    aws_db_instance.mysql,
+  ]
+
   name = "web_app_autoscale"
   desired_capacity   = 1
   min_size           = 1
