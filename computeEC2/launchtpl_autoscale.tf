@@ -4,9 +4,9 @@ data "template_file" "phpconfig" {
   vars = {
     db_port = aws_db_instance.mysql.port
     db_host = aws_db_instance.mysql.address
-    db_user = var.username
-    db_pass = var.password
-    db_name = var.dbname
+    db_user = var.db_user
+    db_pass = var.db_pass
+    db_name = var.db_name
   }
 }
 
@@ -25,9 +25,9 @@ resource "aws_db_instance" "mysql" {
   engine                 = "mysql"
   engine_version         = "5.7"
   instance_class         = "db.t2.micro"
-  name                   = var.dbname
-  username               = var.username
-  password               = var.password
+  name                   = var.db_name
+  username               = var.db_user
+  password               = var.db_pass
   parameter_group_name   = "default.mysql5.7"
   vpc_security_group_ids = [var.priv_security_group]
   db_subnet_group_name   = aws_db_subnet_group.tf_db_subnet_group.name
